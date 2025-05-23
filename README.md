@@ -34,7 +34,7 @@ npm install
 #### Frontend
 
 ```bash
-cd ../frontend
+cd frontend
 npm install
 ```
 

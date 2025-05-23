@@ -1,0 +1,315 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* Custom styles */
+#root, body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+:root {
+  font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
+  line-height: 1.5;
+  font-weight: 400;
+  color-scheme: light dark;
+  color: rgba(255, 255, 255, 0.87);
+  background-color: #242424;
+}
+
+body {
+  margin: 0;
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans', sans-serif;
+  display: flex;
+  place-items: center;
+  min-width: 320px;
+  min-height: 100vh;
+}
+
+a {
+  font-weight: 500;
+  color: #646cff;
+  text-decoration: inherit;
+}
+a:hover {
+  color: #535bf2;
+}
+
+h1 {
+  font-size: 3.2em;
+  line-height: 1.1;
+}
+
+button {
+  border-radius: 8px;
+  border: 1px solid transparent;
+  padding: 0.6em 1.2em;
+  font-size: 1em;
+  font-weight: 500;
+  font-family: inherit;
+  background-color: #1a1a1a;
+  cursor: pointer;
+  transition: border-color 0.25s;
+}
+button:hover {
+  border-color: #646cff;
+}
+button:focus,
+button:focus-visible {
+  outline: 4px auto -webkit-focus-ring-color;
+}
+
+@media (prefers-color-scheme: light) {
+  :root {
+    color: #213547;
+    background-color: #ffffff;
+  }
+  a:hover {
+    color: #747bff;
+  }
+  button {
+    background-color: #f9f9f9;
+  }
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New', monospace;
+}
+
+@layer base {
+  :root {
+    --background: #ffffff;
+    --foreground: #000000;
+    --card: #f9f9f9;
+    --card-foreground: #333333;
+    --popover: #ffffff;
+    --popover-foreground: #333333;
+    --primary: #1a73e8;
+    --primary-foreground: #ffffff;
+    --secondary: #f1f3f4;
+    --secondary-foreground: #333333;
+    --muted: #e0e0e0;
+    --muted-foreground: #666666;
+    --accent: #ff5722;
+    --accent-foreground: #ffffff;
+    --destructive: #d32f2f;
+    --destructive-foreground: #ffffff;
+    --border: #e0e0e0;
+    --input: #ffffff;
+    --ring: #1a73e8;
+    --chart-1: #4caf50;
+    --chart-2: #2196f3;
+    --chart-3: #ff9800;
+    --chart-4: #9c27b0;
+    --chart-5: #f44336;
+    --radius: 0.5rem;
+  }
+  .dark {
+    --background: #121212;
+    --foreground: #e0e0e0;
+    --card: #1e1e1e;
+    --card-foreground: #e0e0e0;
+    --popover: #1e1e1e;
+    --popover-foreground: #ffffff;
+    --primary: #bb86fc;
+    --primary-foreground: #121212;
+    --secondary: #2c2c2c;
+    --secondary-foreground: #e0e0e0;
+    --muted: #3c3c3c;
+    --muted-foreground: #bdbdbd;
+    --accent: #03dac6;
+    --accent-foreground: #121212;
+    --destructive: #cf6679;
+    --destructive-foreground: #121212;
+    --border: #3c3c3c;
+    --input: #2c2c2c;
+    --ring: #bb86fc;
+    --chart-1: #4caf50;
+    --chart-2: #2196f3;
+    --chart-3: #ff9800;
+    --chart-4: #9c27b0;
+    --chart-5: #f44336;
+  }
+}
+
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background-color: var(--background);
+    color: var(--foreground);
+  }
+}
+
+button {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: 1px solid var(--border);
+}
+
+button:hover {
+  background-color: #9a67ea;
+}
+
+input, select {
+  background-color: var(--card-background); /* Fondo dinámico */
+  color: var(--card-foreground); /* Texto dinámico */
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+input::placeholder, select::placeholder {
+  color: var(--muted-foreground); /* Texto placeholder dinámico */
+}
+
+/* Asegurar que los estilos se apliquen correctamente */
+.dark input, .dark select {
+  background-color: var(--card-background); /* Fondo gris oscuro en modo oscuro */
+  color: var(--card-foreground); /* Texto blanco en modo oscuro */
+  border: 1px solid var(--border);
+}
+
+select option {
+  background-color: var(--card-background); /* Fondo dinámico para opciones */
+  color: var(--card-foreground); /* Texto dinámico para opciones */
+}
+
+.card {
+  background-color: var(--card-background);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+}
+
+.navbar, .sidebar {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.navbar a, .sidebar a {
+  color: var(--foreground);
+}
+
+.navbar a:hover, .sidebar a:hover {
+  color: var(--primary);
+}
+
+/* Tema claro */
+:root {
+  --background: #ffffff;
+  --foreground: #000000;
+  --card-background: #f9f9f9;
+  --card-foreground: #333333;
+  --primary: #1a73e8;
+  --primary-foreground: #ffffff;
+  --secondary: #f1f3f4;
+  --secondary-foreground: #333333;
+  --muted: #e0e0e0;
+  --muted-foreground: #666666;
+  --border: #e0e0e0;
+  --table-background: #ffffff; /* Fondo blanco para tablas en tema claro */
+  --table-foreground: #000000; /* Texto negro para tablas en tema claro */
+}
+
+/* Tema oscuro */
+.dark {
+  --background: #121212;
+  --foreground: #e0e0e0;
+  --card-background: #1c1c1c; /* Fondo gris oscuro para recuadros */
+  --card-foreground: #e0e0e0;
+  --primary: #bb86fc;
+  --primary-foreground: #121212;
+  --secondary: #2c2c2c;
+  --secondary-foreground: #e0e0e0;
+  --muted: #3c3c3c;
+  --muted-foreground: #bdbdbd;
+  --border: #3c3c3c;
+  --table-background: #1c1c1c; /* Fondo gris oscuro para tablas en tema oscuro */
+  --table-foreground: #e0e0e0; /* Texto blanco para tablas en tema oscuro */
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+}
+
+button {
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border: 1px solid var(--border);
+}
+
+button:hover {
+  background-color: #9a67ea; /* Color más claro para hover en modo oscuro */
+}
+
+input, select, button, textarea {
+  background-color: var(--card-background);
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+}
+
+input::placeholder, textarea::placeholder {
+  color: var(--muted-foreground);
+}
+
+label {
+  color: var(--foreground); /* Texto dinámico para etiquetas */
+}
+
+.dark label {
+  color: var(--foreground); /* Texto blanco en modo oscuro */
+}
+
+.card, .table, .box {
+  background-color: var(--card-background); /* Fondo gris oscuro */
+  color: var(--card-foreground);
+  border: 1px solid var(--border);
+  border-radius: 8px; /* Bordes redondeados para consistencia */
+  padding: 1rem; /* Espaciado interno */
+}
+
+table {
+  background-color: var(--table-background); /* Fondo dinámico para tablas */
+  color: var(--table-foreground); /* Texto dinámico para tablas */
+  border: 1px solid var(--border);
+  border-radius: 8px; /* Bordes redondeados */
+}
+
+th, td {
+  border: 1px solid var(--border); /* Bordes dinámicos */
+  padding: 0.75rem; /* Espaciado interno */
+}
+
+thead th {
+  background-color: var(--muted); /* Fondo para encabezados */
+  color: var(--foreground); /* Texto para encabezados */
+}
+
+tbody tr:nth-child(even) {
+  background-color: var(--secondary); /* Fondo alternado para filas */
+}
+
+tbody tr:nth-child(odd) {
+  background-color: var(--card-background); /* Fondo alternado para filas */
+}
+
+table th, table td {
+  text-align: center; /* Centrar texto en todas las tablas */
+}
+
+.navbar, .sidebar {
+  background-color: var(--secondary);
+  color: var(--secondary-foreground);
+}
+
+.navbar a, .sidebar a {
+  color: var(--foreground);
+}
+
+.navbar a:hover, .sidebar a:hover {
+  color: var(--primary);
+}

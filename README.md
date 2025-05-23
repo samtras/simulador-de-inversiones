@@ -18,8 +18,8 @@ Este proyecto es un simulador de inversiones con frontend en React y backend en 
 ### 1. Clonar el repositorio
 
 ```bash
-git clone https://github.com/tuusuario/tu-repo.git
-cd tu-repo
+git clone https://github.com/samtras/simulador-de-inversiones.git
+cd simulador-de-inversiones
 ```
 
 ### 2. Instalar dependencias

@@ -6,6 +6,9 @@
 
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 import { AuthContext } from "../context/AuthContext";
 import { usePortfolio } from "../context/PortfolioContext";
 
@@ -39,7 +42,7 @@ const Orders = ({ onOrderClosed }) => {
 
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/orders/portfolio/${selectedPortfolioId}?estado=Abierta`
+          `${API_URL}/orders/portfolio/${selectedPortfolioId}?estado=Abierta`
         );
         setOrders(response.data.filter((order) => order.estado === "Abierta"));
       } catch (error) {
@@ -60,7 +63,7 @@ const Orders = ({ onOrderClosed }) => {
    */
   const handleCloseOrder = async (orderId) => {
     try {
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/orders/close`, {
+      const response = await axios.post(`${API_URL}/orders/close`, {
         userId: user.id,
         orderId,
       });

@@ -1,6 +1,9 @@
 import { useEffect, useState, useContext } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
+
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 import { AuthContext } from "../context/AuthContext";
 import { usePortfolio } from "../context/PortfolioContext";
 
@@ -25,13 +28,13 @@ const PortfolioBalancePie = ({ refresh }) => {
       try {
         // 1. Intenta obtener solo órdenes abiertas
         let res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/orders/portfolio/${selectedPortfolioId}?estado=Abierta`
+          `${API_URL}/orders/portfolio/${selectedPortfolioId}?estado=Abierta`
         );
         let openOrders = res.data.filter((order) => order.estado === "Abierta");
         // 2. Si no hay órdenes abiertas, busca en el historial las que no tengan fechaCierre
         if (openOrders.length === 0) {
           res = await axios.get(
-            `${import.meta.env.VITE_API_URL}/orders/portfolio/${selectedPortfolioId}`
+            `${API_URL}/orders/portfolio/${selectedPortfolioId}`
           );
           openOrders = res.data.filter((order) => !order.fechaCierre || order.fechaCierre === "N/A");
         }
@@ -49,7 +52,7 @@ const PortfolioBalancePie = ({ refresh }) => {
     const fetchPortfolio = async () => {
       if (!selectedPortfolioId) return;
       try {
-        const res = await axios.get(`${import.meta.env.VITE_API_URL}/portfolios/${selectedPortfolioId}`);
+        const res = await axios.get(`${API_URL}/portfolios/${selectedPortfolioId}`);
         setPortfolioBalance(res.data.balance ?? 0);
         setCash(res.data.fondoDisponible ?? 0); // Obtener fondoDisponible real
       } catch {

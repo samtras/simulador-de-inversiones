@@ -7,6 +7,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 /**
  * Componente News
  * Muestra una lista de noticias financieras relevantes obtenidas desde la API.
@@ -34,7 +36,7 @@ const News = () => {
      */
     const fetchNews = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/market-data/news`);
+        const response = await axios.get(`${API_URL}/market-data/news`);
         setNews(response.data);
       } catch {
         setError("Error al cargar las noticias.");

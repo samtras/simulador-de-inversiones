@@ -8,6 +8,8 @@
 import { createContext, useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
@@ -36,7 +38,7 @@ export const AuthProvider = ({ children }) => {
 
   const register = async (email, password) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/register", { email, password });
+      const res = await axios.post(`${API_URL}/auth/register`, { email, password });
       localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("token", res.data.token);
       setUser(res.data.user);
@@ -51,7 +53,7 @@ export const AuthProvider = ({ children }) => {
 
   const login = async (email, password) => {
     try {
-      const res = await axios.post("http://localhost:5000/api/auth/login", { email, password });
+      const res = await axios.post(`${API_URL}/auth/login`, { email, password });
       localStorage.setItem("user", JSON.stringify(res.data.user));
       localStorage.setItem("token", res.data.token);
       setUser(res.data.user);

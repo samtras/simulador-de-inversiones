@@ -5,6 +5,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 const COMMODITY_SYMBOLS = ["BZUSD", "SIUSD", "ESUSD", "GCUSD"];
 
 const CommoditiesTable = ({ onSelect }) => {
@@ -19,7 +21,7 @@ const CommoditiesTable = ({ onSelect }) => {
       try {
         // Consultar al backend, no a la API de FMP directamente
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/market-data/commodities`
+          `${API_URL}/market-data/commodities`
         );
         setCommodities(response.data);
       } catch (err) {
@@ -47,7 +49,7 @@ const CommoditiesTable = ({ onSelect }) => {
           </tr>
         </thead>
         <tbody>
-          {commodities.map((item) => (
+          {(Array.isArray(commodities) ? commodities : []).map((item) => (
             <tr key={item.symbol}>
               <td className="py-2 px-4 border-b">{item.symbol}</td>
               <td className="py-2 px-4 border-b">${item.price?.toFixed(2) ?? "-"}</td>

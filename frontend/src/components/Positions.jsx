@@ -6,6 +6,9 @@
 
 import { useEffect, useState, useContext } from "react";
 import axios from "axios";
+
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 import { AuthContext } from "../context/AuthContext";
 import { usePortfolio } from "../context/PortfolioContext";
 
@@ -39,7 +42,7 @@ const Positions = ({ refresh }) => {
 
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/orders/portfolio/${selectedPortfolioId}?estado=Abierta`
+          `${API_URL}/orders/portfolio/${selectedPortfolioId}?estado=Abierta`
         );
         // Agrupa las órdenes abiertas por símbolo, sumando cantidades y valores totales
         const groupedPositions = response.data.reduce((acc, order) => {

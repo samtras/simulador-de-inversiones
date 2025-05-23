@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 const FOREX_SYMBOLS = [
   "USDCAD", "EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCHF", "NZDUSD", "USDCNY", "USDMXN", "USDINR"
 ];
@@ -16,7 +18,7 @@ const ForexTable = ({ onSelect }) => {
       setError(null);
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/market-data/forex`
+          `${API_URL}/market-data/forex`
         );
         setForex(response.data);
       } catch (err) {
@@ -44,7 +46,7 @@ const ForexTable = ({ onSelect }) => {
           </tr>
         </thead>
         <tbody>
-          {forex.map((item) => (
+          {(Array.isArray(forex) ? forex : []).map((item) => (
             <tr key={item.symbol}>
               <td className="py-2 px-4 border-b">{item.symbol}</td>
               <td className="py-2 px-4 border-b">${item.price?.toFixed(5) ?? "-"}</td>

@@ -9,8 +9,10 @@ import Navbar from "./NavBar";
 import { Outlet } from "react-router-dom";
 import { useState, useEffect, useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
-import axios from "axios";
 import { usePortfolio } from "../context/PortfolioContext";
+import axios from "axios";
+
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
 
 /**
  * Componente Layout
@@ -29,7 +31,7 @@ const Layout = () => {
       if (!selectedPortfolioId) return;
       try {
         const res = await axios.get(
-          `${import.meta.env.VITE_API_URL}/portfolios/${selectedPortfolioId}`
+          `${API_URL}/portfolios/${selectedPortfolioId}`
         );
         if (res.data && typeof res.data.fondoDisponible === 'number') {
           setAvailableBalance(res.data.fondoDisponible);

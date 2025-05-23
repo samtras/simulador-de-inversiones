@@ -5,6 +5,8 @@ import { usePortfolio } from "../context/PortfolioContext";
 import PortfolioBalancePie from "../components/PortfolioBalancePie";
 import Orders from "../components/Orders";
 
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 const Portfolios = () => {
   const { user } = useContext(AuthContext);
   const { selectedPortfolioId, setSelectedPortfolioId } = usePortfolio();
@@ -19,7 +21,7 @@ const Portfolios = () => {
   const fetchPortfolios = async () => {
     setLoading(true);
     try {
-      const res = await axios.get(`${import.meta.env.VITE_API_URL}/portfolios/user/${user.id}`);
+      const res = await axios.get(`${API_URL}/portfolios/user/${user.id}`);
       setPortfolios(res.data);
     } catch (err) {
       if (err.response && err.response.status === 404) {
@@ -45,11 +47,11 @@ const Portfolios = () => {
     if (!newPortfolioName.trim()) return;
     setCreating(true);
     try {
-      await axios.post(`${import.meta.env.VITE_API_URL}/portfolios`, {
+      await axios.post(`${API_URL}/portfolios`, {
         userId: user.id,
         name: newPortfolioName,
-        fondoDisponible: initialBalance, // Usar fondoDisponible
-        balance: initialBalance // Inicialmente igual
+        fondoDisponible: initialBalance,
+        balance: initialBalance
       });
       setNewPortfolioName("");
       setInitialBalance(10000);
@@ -64,7 +66,7 @@ const Portfolios = () => {
   const handleDelete = async (id) => {
     if (!window.confirm("¿Eliminar este portafolio?")) return;
     try {
-      await axios.delete(`${import.meta.env.VITE_API_URL}/portfolios/${id}`);
+      await axios.delete(`${API_URL}/portfolios/${id}`);
       // Si el portafolio eliminado era el seleccionado, limpiar selección
       if (selectedPortfolioId === id) {
         setSelectedPortfolioId("");
@@ -77,9 +79,9 @@ const Portfolios = () => {
   };
 
   // Balance total de todos los portafolios
-  const totalBalance = portfolios.reduce((acc, p) => acc + (p.balance || 0), 0);
+  const totalBalance = (Array.isArray(portfolios) ? portfolios : []).reduce((acc, p) => acc + (p.balance || 0), 0);
   // Balance del portafolio seleccionado
-  const selectedPortfolioObj = portfolios.find((p) => p._id === selectedPortfolioId);
+  const selectedPortfolioObj = (Array.isArray(portfolios) ? portfolios : []).find((p) => p._id === selectedPortfolioId);
   const selectedBalance = selectedPortfolioObj ? selectedPortfolioObj.balance : 0;
   const selectedFondoDisponible = selectedPortfolioObj ? selectedPortfolioObj.fondoDisponible : 0;
 
@@ -124,7 +126,7 @@ const Portfolios = () => {
           className="ml-2 p-2 border rounded-md"
         >
           <option value="">-- Selecciona --</option>
-          {portfolios.map((p) => (
+          {(Array.isArray(portfolios) ? portfolios : []).map((p) => (
             <option key={p._id} value={p._id}>{p.name}</option>
           ))}
         </select>
@@ -148,12 +150,12 @@ const Portfolios = () => {
             </tr>
           </thead>
           <tbody>
-            {portfolios.length === 0 ? (
+            {(Array.isArray(portfolios) ? portfolios : []).length === 0 ? (
               <tr>
                 <td colSpan={3} className="text-center py-4">No tienes portafolios aún.</td>
               </tr>
             ) : (
-              portfolios.map((p) => (
+              (Array.isArray(portfolios) ? portfolios : []).map((p) => (
                 <tr key={p._id}>
                   <td className="py-2 px-4 border-b">{p.name}</td>
                   <td className="py-2 px-4 border-b">${p.balance?.toFixed(2) ?? "0.00"}</td>

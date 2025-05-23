@@ -14,8 +14,8 @@ import CommoditiesTable from "../components/CommoditiesTable";
 import CryptosTable from "../components/CryptosTable";
 import ForexTable from "../components/ForexTable";
 import { usePortfolio } from "../context/PortfolioContext";
-import Orders from "../components/Orders";
-import PortfolioBalancePie from "../components/PortfolioBalancePie";
+
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
 
 const Dashboard = () => {
   const [marketData, setMarketData] = useState([]);
@@ -44,7 +44,7 @@ const Dashboard = () => {
 
     const fetchMarketData = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/market-data`);
+        const response = await axios.get(`${API_URL}/market-data`);
         if (response.status === 200 && Array.isArray(response.data)) {
           setMarketData(response.data);
         } else {

@@ -1,6 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 const CRYPTO_SYMBOLS = [
   "BTCUSD", "ETHUSD", "USDTUSD", "BNBUSD", "SOLUSD", "USDCUSD", "XRPUSD", "DOGEUSD", "TONUSD", "TRXUSD", "ADAUSD", "AVAXUSD", "SHIBUSD", "LINKUSD", "DOTUSD", "BCHUSD", "DAIUSD", "LEOUSD", "LTCUSD", "NEARUSD", "KASUSD", "UNIUSD", "ICPUSD", "FETUSD", "XMRUSD", "PEPEUSD", "SUIUSD", "APTUSD", "XLMUSD", "POLUSD", "FDUSD", "ETCUSD", "OKBUSD", "STXUSD", "TAOUSD", "CROUSD", "AAVEUSD", "FILUSD", "IMXUSD", "HBARUSD", "MNTUSD", "INJUSD", "ARBUSD", "VETUSD", "OPUSD", "ATOMUSD", "WIFUSD", "FTMUSD", "MKRUSD", "GRTUSD", "RUNEUSD", "THETAUSD", "BGBUSD", "ARUSD", "MATICUSD", "HNTUSD", "BONKUSD", "FLOKIUSD", "ALGOUSD", "SEIUSD", "PYTHUSD", "JUPUSD", "TIAUSD", "JASMYUSD", "KCSUSD", "BSVUSD", "OMUSD", "LDOUSD", "QNTUSD", "ONDOUSD", "BTTUSD", "FLOWUSD", "COREUSD", "PYUSD", "NOTUSD", "BRETTUSD", "USDDUSD", "GTUSD", "EOSUSD", "FLRUSD", "BEAMUSD", "CKBUSD", "POPCATUSD", "STRKUSD", "EGLDUSD", "AXSUSD", "NEOUSD", "ORDIUSD", "WLDUSD", "XTZUSD", "GALAUSD", "XECUSD", "CFXUSD", "AKTUSD", "SANDUSD", "DYDXUSD", "BNXUSD"
 ];
@@ -16,7 +18,7 @@ const CryptosTable = ({ onSelect }) => {
       setError(null);
       try {
         const response = await axios.get(
-          `${import.meta.env.VITE_API_URL}/market-data/cryptos`
+          `${API_URL}/market-data/cryptos`
         );
         setCryptos(response.data);
       } catch (err) {
@@ -44,7 +46,7 @@ const CryptosTable = ({ onSelect }) => {
           </tr>
         </thead>
         <tbody>
-          {cryptos.map((item) => (
+          {(Array.isArray(cryptos) ? cryptos : []).map((item) => (
             <tr key={item.symbol}>
               <td className="py-2 px-4 border-b">{item.symbol}</td>
               <td className="py-2 px-4 border-b">${item.price?.toFixed(2) ?? "-"}</td>

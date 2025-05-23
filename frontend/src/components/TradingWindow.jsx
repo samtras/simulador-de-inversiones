@@ -7,6 +7,9 @@
 
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
+
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 import { AuthContext } from "../context/AuthContext";
 import { usePortfolio } from "../context/PortfolioContext";
 
@@ -124,7 +127,7 @@ const TradingWindow = ({ selectedAsset, availableBalance, onTradeExecuted }) => 
       console.log("Datos enviados al backend:", payload); // Registrar los datos enviados
 
       // Envía la orden al backend
-      const response = await axios.post(`${import.meta.env.VITE_API_URL}/orders`, payload);
+      const response = await axios.post(`${API_URL}/orders`, payload);
 
       if (response.status === 201) {
         // Actualiza el saldo global inmediatamente

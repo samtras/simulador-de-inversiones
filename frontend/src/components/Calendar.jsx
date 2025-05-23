@@ -7,6 +7,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+
 /**
  * Componente principal Calendar
  * - Obtiene y muestra eventos económicos (dividendos, ganancias, splits) de los próximos 30 días.
@@ -45,13 +47,13 @@ const Calendar = () => {
         // Llama a las 3 APIs en paralelo y maneja errores individuales
         const [dividends, earnings, splits] = await axios.all([
           axios.get(
-            `${import.meta.env.VITE_API_URL}/market-data/dividends-calendar?from=${from}&to=${to}`
+            `${API_URL}/market-data/dividends-calendar?from=${from}&to=${to}`
           ).catch(() => ({ data: [] })),
           axios.get(
-            `${import.meta.env.VITE_API_URL}/market-data/earnings-calendar?from=${from}&to=${to}`
+            `${API_URL}/market-data/earnings-calendar?from=${from}&to=${to}`
           ).catch(() => ({ data: [] })),
           axios.get(
-            `${import.meta.env.VITE_API_URL}/market-data/splits-calendar?from=${from}&to=${to}`
+            `${API_URL}/market-data/splits-calendar?from=${from}&to=${to}`
           ).catch(() => ({ data: [] })),
         ]);
         // Unifica y normaliza los eventos

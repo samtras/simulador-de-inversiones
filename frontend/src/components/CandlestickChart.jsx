@@ -7,7 +7,8 @@
 import { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
-import { SMA, EMA, BollingerBands } from "technicalindicators";
+
+const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
 
 /**
  * Componente CandlestickChart
@@ -50,11 +51,11 @@ const CandlestickChart = ({ assetName, symbol }) => {
         ].includes(symbol);
         let url;
         if (isCrypto) {
-          url = `${import.meta.env.VITE_API_URL}/market-data/historical-crypto/${symbol}?interval=${interval}`;
+          url = `${API_URL}/market-data/historical-crypto/${symbol}?interval=${interval}`;
         } else if (isForex) {
-          url = `${import.meta.env.VITE_API_URL}/market-data/historical-forex/${symbol}?interval=${interval}`;
+          url = `${API_URL}/market-data/historical-forex/${symbol}?interval=${interval}`;
         } else {
-          url = `${import.meta.env.VITE_API_URL}/market-data/historical/${symbol}?interval=${interval}`;
+          url = `${API_URL}/market-data/historical/${symbol}?interval=${interval}`;
         }
         const response = await axios.get(url);
         setChartData(response.data);

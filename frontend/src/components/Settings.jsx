@@ -14,7 +14,6 @@ const Settings = () => {
   const { availableBalance, handleBalanceUpdate } = useOutletContext(); // Obtener saldo y función de actualización
   const [theme, setTheme] = useState(localStorage.getItem("theme") || "light");
   const [pendingTheme, setPendingTheme] = useState(theme); // Tema pendiente de guardar
-  const [pendingCapital, setPendingCapital] = useState(availableBalance || 0); // Asegurar valor inicial definido
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
 
   useEffect(() => {
@@ -27,14 +26,6 @@ const Settings = () => {
       // Guardar el tema en localStorage y aplicarlo
       localStorage.setItem("theme", pendingTheme);
       setTheme(pendingTheme);
-
-      // Actualizar el saldo ficticio en el backend
-      if (user?.id) {
-        const response = await axios.put(`${import.meta.env.VITE_API_URL}/users/${user.id}/balance`, {
-          balance: pendingCapital,
-        });
-        handleBalanceUpdate(response.data.balance); // Actualizar el saldo en el frontend
-      }
 
       // Mostrar mensaje de éxito
       setShowSuccessMessage(true);
@@ -64,22 +55,6 @@ const Settings = () => {
             <option value="light">Claro</option>
             <option value="dark">Oscuro</option>
           </select>
-        </div>
-
-        {/* Capital inicial */}
-        <div>
-          <label className="block text-sm font-medium">Saldo Ficticio</label>
-          <input
-            type="number"
-            value={pendingCapital}
-            onChange={(e) => setPendingCapital(Number(e.target.value) || 0)} // Asegurar que siempre sea un número
-            className="w-full p-2 border rounded-md"
-            style={{
-              backgroundColor: "var(--card-background)",
-              color: "var(--card-foreground)",
-              borderColor: "var(--border)",
-            }}
-          />
         </div>
 
         {/* Botón para guardar cambios */}

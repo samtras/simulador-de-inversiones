@@ -41,6 +41,8 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", res.data.token);
       setUser(res.data.user);
       setToken(res.data.token);
+      // Limpiar selección de portafolio al registrar
+      localStorage.removeItem("selectedPortfolio");
     } catch (error) {
       console.error("Error en el registro:", error.response?.data?.message || error.message);
       throw error;
@@ -54,8 +56,11 @@ export const AuthProvider = ({ children }) => {
       localStorage.setItem("token", res.data.token);
       setUser(res.data.user);
       setToken(res.data.token);
+      // Limpiar selección de portafolio al login
+      localStorage.removeItem("selectedPortfolio");
     } catch (error) {
-      console.error("Error en el inicio de sesión:", error.response?.data?.message || error.message);
+      // Quita el console.error para no mostrar el error en consola
+      // console.error("Error en el inicio de sesión:", error.response?.data?.message || error.message);
       throw error;
     }
   };
@@ -65,6 +70,8 @@ export const AuthProvider = ({ children }) => {
     localStorage.removeItem("token");
     setUser(null);
     setToken(null);
+    // Limpiar selección de portafolio al logout
+    localStorage.removeItem("selectedPortfolio");
   };
 
   return (

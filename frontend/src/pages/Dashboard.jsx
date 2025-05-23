@@ -220,8 +220,6 @@ const Dashboard = () => {
           <ForexTable onSelect={handleAssetSelect} />
         )}
       </div>
-      <PortfolioBalancePie refresh={refresh} />
-      <Orders onOrderClosed={handleTradeExecuted} />
     </div>
   );
 };

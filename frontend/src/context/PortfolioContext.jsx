@@ -20,8 +20,21 @@ export const PortfolioProvider = ({ children }) => {
     }
   }, [selectedPortfolioId]);
 
+  // Función para limpiar selección de portafolio y saldo
+  const clearPortfolioSelection = () => {
+    setSelectedPortfolioId("");
+    setAvailableBalance(undefined);
+    localStorage.removeItem("selectedPortfolio");
+  };
+
   return (
-    <PortfolioContext.Provider value={{ selectedPortfolioId, setSelectedPortfolioId, availableBalance, setAvailableBalance }}>
+    <PortfolioContext.Provider value={{
+      selectedPortfolioId,
+      setSelectedPortfolioId,
+      availableBalance,
+      setAvailableBalance,
+      clearPortfolioSelection
+    }}>
       {children}
     </PortfolioContext.Provider>
   );

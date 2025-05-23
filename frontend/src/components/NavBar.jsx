@@ -7,6 +7,7 @@
 import { useContext } from "react";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import { usePortfolio } from "../context/PortfolioContext";
 
 /**
  * Componente NavBar
@@ -17,6 +18,7 @@ import { useNavigate } from "react-router-dom";
 const NavBar = ({ saldoDisponible }) => {
   // Obtiene la función de logout del contexto de autenticación
   const { logout } = useContext(AuthContext);
+  const { clearPortfolioSelection } = usePortfolio();
   // Hook de navegación de React Router
   const navigate = useNavigate();
 
@@ -29,6 +31,7 @@ const NavBar = ({ saldoDisponible }) => {
         <button
           onClick={() => {
             logout();
+            clearPortfolioSelection();
             navigate("/login");
           }}
           className="bg-red-600 px-4 py-2 rounded hover:bg-red-700"

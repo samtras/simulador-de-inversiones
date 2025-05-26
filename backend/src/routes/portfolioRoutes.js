@@ -18,15 +18,16 @@ router.get('/user/:userId', async (req, res) => {
 // Crear un nuevo portafolio
 router.post('/', async (req, res) => {
   try {
-    const { userId, name, balance } = req.body;
+    const { userId, name, fondoDisponible, balance } = req.body;
     if (!userId || !name) {
       return res.status(400).json({ error: 'userId y name son obligatorios' });
     }
+    const saldoInicial = fondoDisponible ?? balance ?? 10000;
     const nuevoPortafolio = new Portfolio({
       userId,
       name,
-      fondoDisponible: balance ?? 10000, // El saldo inicial es fondoDisponible
-      balance: balance ?? 10000 // Inicialmente igual
+      fondoDisponible: saldoInicial,
+      balance: saldoInicial
     });
     await nuevoPortafolio.save();
     res.status(201).json(nuevoPortafolio);

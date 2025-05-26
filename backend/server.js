@@ -21,7 +21,12 @@ const PORT = process.env.PORT || 5000;
 // Middlewares
 app.use(express.json());
 app.use(cors({
-  origin: process.env.FRONTEND_URL || '*'
+  origin: [
+    'http://localhost:5173',
+    'https://simulador-frontend-4129b7cb9731.herokuapp.com',
+    'https://www.plataforma-inversion-educativa.store'
+  ],
+  credentials: true
 }));
 
 // Rutas

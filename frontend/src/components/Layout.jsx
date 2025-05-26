@@ -12,7 +12,7 @@ import { AuthContext } from "../context/AuthContext";
 import { usePortfolio } from "../context/PortfolioContext";
 import axios from "axios";
 
-const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, '');
 
 /**
  * Componente Layout
@@ -43,6 +43,28 @@ const Layout = () => {
       }
     };
     if (selectedPortfolioId) fetchPortfolioBalance();
+  }, [selectedPortfolioId, setAvailableBalance]);
+
+  // Actualiza el saldo disponible tras operar (cuando se ejecuta una operación)
+  useEffect(() => {
+    const handleStorageChange = (e) => {
+      if (e.key === "refreshBalance") {
+        // Refresca el saldo disponible
+        if (selectedPortfolioId) {
+          axios.get(`${API_URL}/portfolios/${selectedPortfolioId}`)
+            .then(res => {
+              if (res.data && typeof res.data.fondoDisponible === 'number') {
+                setAvailableBalance(res.data.fondoDisponible);
+              } else {
+                setAvailableBalance(0);
+              }
+            })
+            .catch(() => setAvailableBalance(0));
+        }
+      }
+    };
+    window.addEventListener("storage", handleStorageChange);
+    return () => window.removeEventListener("storage", handleStorageChange);
   }, [selectedPortfolioId, setAvailableBalance]);
 
   // Nuevo: función para manejar selección de portafolio y actualizar saldo

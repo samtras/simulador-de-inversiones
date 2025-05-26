@@ -7,10 +7,11 @@
     "dev": "vite",
     "build": "vite build",
     "preview": "vite preview",
-    "start": "vite preview"
+    "start": "serve -s dist"
   },
   "dependencies": {
     "@heroicons/react": "^2.2.0",
+    "@reactour/tour": "^3.8.0",
     "@tailwindcss/postcss": "^4.0.15",
     "apexcharts": "^4.5.0",
     "axios": "^1.8.4",
@@ -20,6 +21,7 @@
     "react-dom": "^19.0.0",
     "react-router-dom": "^7.4.0",
     "react-tooltip": "^5.28.1",
+    "serve": "^14.2.0",
     "technicalindicators": "^3.1.0"
   },
   "devDependencies": {

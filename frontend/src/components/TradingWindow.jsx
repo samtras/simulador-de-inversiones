@@ -8,7 +8,7 @@
 import { useState, useContext, useEffect } from "react";
 import axios from "axios";
 
-const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, '');
 
 import { AuthContext } from "../context/AuthContext";
 import { usePortfolio } from "../context/PortfolioContext";
@@ -130,10 +130,16 @@ const TradingWindow = ({ selectedAsset, availableBalance, onTradeExecuted }) => 
       const response = await axios.post(`${API_URL}/orders`, payload);
 
       if (response.status === 201) {
-        // Actualiza el saldo global inmediatamente
-        if (typeof setAvailableBalance === 'function' && typeof response.data.updatedBalance === 'number') {
-          setAvailableBalance(response.data.updatedBalance);
+        // Actualiza el saldo global inmediatamente consultando el backend (no uses el balance del portafolio, sino el efectivo actualizado)
+        if (typeof setAvailableBalance === 'function') {
+          // Consulta el efectivo actualizado del portafolio
+          const res = await axios.get(`${API_URL}/portfolios/${selectedPortfolioId}`);
+          if (res.data && typeof res.data.fondoDisponible === 'number') {
+            setAvailableBalance(res.data.fondoDisponible);
+          }
         }
+        // Notifica a otras pestañas para refrescar el saldo
+        localStorage.setItem("refreshBalance", Date.now().toString());
         // Llama al callback de refresco si existe
         if (typeof onTradeExecuted === 'function') {
           onTradeExecuted();
@@ -142,7 +148,6 @@ const TradingWindow = ({ selectedAsset, availableBalance, onTradeExecuted }) => 
       }
     } catch (error) {
       console.error("Error ejecutando la operación:", error.message);
-      // Mostrar el mensaje de error del backend si existe
       alert(`Error al ejecutar la operación: ${error.response?.data?.error || error.message}`);
     }
   };

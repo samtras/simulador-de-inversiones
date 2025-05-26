@@ -31,7 +31,7 @@ const Sidebar = () => {
     { name: "Calendario económico", icon: Calendar, path: "/calendar" },
     { name: "Preferencias", icon: Settings, path: "/settings" },
     { name: "Calculadora de Interés Compuesto", icon: BarChart2, path: "/calculadora-interes-compuesto" },
-    { name: "Documentación", icon: FileText, path: "/documentation" }, // Nuevo apartado
+    { name: "Documentación", icon: FileText, path: "/documentation" },
   ];
 
   /**
@@ -41,11 +41,7 @@ const Sidebar = () => {
    * @param {string} path - Ruta a la que se desea navegar
    */
   const handleNavigation = (path) => {
-    if (!user) {
-      navigate("/login");
-    } else {
-      navigate(path);
-    }
+    navigate(path); // No verifiques user aquí, solo navega
   };
 
   // Renderiza la barra lateral con los ítems de navegación

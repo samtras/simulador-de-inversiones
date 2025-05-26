@@ -1,11 +1,10 @@
-import { useEffect, useState, useContext } from "react";
+import { useEffect, useState, useContext, forwardRef, useImperativeHandle } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
-
-const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
-
 import { AuthContext } from "../context/AuthContext";
 import { usePortfolio } from "../context/PortfolioContext";
+
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, '');
 
 /**
  * Componente PortfolioBalancePie
@@ -13,7 +12,7 @@ import { usePortfolio } from "../context/PortfolioContext";
  * 1. Distribución por activo (ej: Apple, Oro, BTC, etc.)
  * 2. Distribución por categoría (Acciones, Criptos, Forex, Materias Primas)
  */
-const PortfolioBalancePie = ({ refresh }) => {
+const PortfolioBalancePie = forwardRef(({ refresh }, ref) => {
   const { user } = useContext(AuthContext);
   const { selectedPortfolioId } = usePortfolio();
   const [positions, setPositions] = useState([]);
@@ -78,85 +77,75 @@ const PortfolioBalancePie = ({ refresh }) => {
     return "Acciones";
   };
 
-  // Agrupa por símbolo y calcula la cantidad y valor neto de cada activo
-  const groupedBySymbol = {};
-  let totalActivos = 0;
+  // Agrupa activos (solo compras y efectivo)
+  const activos = {};
   positions.forEach((order) => {
-    const symbol = order.symbol;
-    const isShort = order.tipoOperacion === "Venta";
-    const cantidad = isShort ? -order.cantidad : order.cantidad;
-    const precioActual = order.precioActual || order.precioEntrada;
-    if (!groupedBySymbol[symbol]) {
-      groupedBySymbol[symbol] = { cantidad: 0, valor: 0 };
+    if (order.tipoOperacion === "Compra") {
+      const symbol = order.symbol;
+      const precioActual = order.precioActual || order.precioEntrada;
+      if (!activos[symbol]) activos[symbol] = 0;
+      activos[symbol] += order.cantidad * precioActual;
     }
-    groupedBySymbol[symbol].cantidad += cantidad;
-    groupedBySymbol[symbol].valor += cantidad * precioActual;
+  });
+  activos["Efectivo"] = cash;
+
+  // Agrupa pasivos (solo shorts)
+  const pasivos = {};
+  positions.forEach((order) => {
+    if (order.tipoOperacion === "Venta") {
+      const symbol = order.symbol;
+      const precioActual = order.precioActual || order.precioEntrada;
+      if (!pasivos[symbol]) pasivos[symbol] = 0;
+      pasivos[symbol] += order.cantidad * precioActual;
+    }
   });
 
-  // Solo activos con cantidad neta distinta de 0
-  const groupedBySymbolFiltered = Object.fromEntries(
-    Object.entries(groupedBySymbol)
-      .filter(([_, data]) => Math.abs(data.cantidad) > 0.00001)
-      .map(([symbol, data]) => [symbol, data.valor])
-  );
-  totalActivos = Object.values(groupedBySymbolFiltered).reduce((a, b) => a + b, 0);
-  const groupedBySymbolWithCash = { ...groupedBySymbolFiltered, "Efectivo": cash };
-
-  // Agrupa por categoría usando la utilidad y solo activos netos
-  const groupedByCategory = {};
-  Object.entries(groupedBySymbolFiltered).forEach(([symbol, valor]) => {
+  // Por categoría
+  const activosPorCategoria = {};
+  Object.entries(activos).forEach(([symbol, valor]) => {
+    if (symbol === "Efectivo") return;
     const cat = getCategory(symbol);
-    if (!groupedByCategory[cat]) groupedByCategory[cat] = 0;
-    groupedByCategory[cat] += valor;
+    if (!activosPorCategoria[cat]) activosPorCategoria[cat] = 0;
+    activosPorCategoria[cat] += valor;
   });
-  const groupedByCategoryWithCash = { ...groupedByCategory, "Efectivo": cash };
+  activosPorCategoria["Efectivo"] = cash;
 
-  // Si el total es 0, muestra igual la porción de efectivo
-  const totalParaGraficos = Object.values(groupedBySymbolWithCash).reduce((a, b) => a + b, 0);
+  const pasivosPorCategoria = {};
+  Object.entries(pasivos).forEach(([symbol, valor]) => {
+    const cat = getCategory(symbol);
+    if (!pasivosPorCategoria[cat]) pasivosPorCategoria[cat] = 0;
+    pasivosPorCategoria[cat] += valor;
+  });
 
-  // Si no hay posiciones activas, solo mostrar efectivo
-  if (!positions || positions.length === 0) {
-    return (
-      <div className="p-4">
-        <h2 className="text-lg font-bold mb-4">Distribución del Portafolio</h2>
-        <div className="text-xs text-gray-500 mb-2">
-          * Solo tienes efectivo disponible en este portafolio.
-        </div>
-        <Chart
-          options={{
-            labels: ["Efectivo"],
-            legend: { position: "bottom" },
-            dataLabels: { enabled: true, formatter: (v) => v.toFixed(2) + "%" },
-          }}
-          series={[100]}
-          type="pie"
-          height={300}
-        />
-      </div>
-    );
-  }
+  // Para exportar al resumen
+  useImperativeHandle(ref, () => ({
+    activos,
+    pasivos,
+    activosPorCategoria,
+    pasivosPorCategoria,
+    efectivo: cash
+  }));
 
+  // Gráficos
   return (
     <div className="p-4">
-      <h2 className="text-lg font-bold mb-4">Distribución del Portafolio</h2>
+      <h2 className="text-lg font-bold mb-4">Distribución de Activos</h2>
       <div className="text-xs text-gray-500 mb-2">
-        * En los gráficos, las posiciones en corto solo suman si están en ganancia. El saldo disponible siempre se muestra como "Efectivo".
+        * Solo incluye compras y efectivo.
       </div>
       {loading ? (
         <div>Cargando datos...</div>
-      ) : totalParaGraficos === 0 ? (
-        <div>No hay posiciones abiertas ni saldo en este portafolio.</div>
       ) : (
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-8">
           <div>
             <h3 className="font-semibold mb-2">Por activo</h3>
             <Chart
               options={{
-                labels: Object.keys(groupedBySymbolWithCash),
+                labels: Object.keys(activos),
                 legend: { position: "bottom" },
                 dataLabels: { enabled: true, formatter: (v) => v.toFixed(2) + "%" },
               }}
-              series={Object.values(groupedBySymbolWithCash).map((v) => ((v / totalParaGraficos) * 100))}
+              series={Object.values(activos)}
               type="pie"
               height={300}
             />
@@ -165,11 +154,50 @@ const PortfolioBalancePie = ({ refresh }) => {
             <h3 className="font-semibold mb-2">Por categoría</h3>
             <Chart
               options={{
-                labels: Object.keys(groupedByCategoryWithCash),
+                labels: Object.keys(activosPorCategoria),
                 legend: { position: "bottom" },
                 dataLabels: { enabled: true, formatter: (v) => v.toFixed(2) + "%" },
               }}
-              series={Object.values(groupedByCategoryWithCash).map((v) => ((v / totalParaGraficos) * 100))}
+              series={Object.values(activosPorCategoria)}
+              type="pie"
+              height={300}
+            />
+          </div>
+        </div>
+      )}
+
+      <h2 className="text-lg font-bold mb-4">Distribución de Pasivos</h2>
+      <div className="text-xs text-gray-500 mb-2">
+        * Solo incluye ventas en corto (shorts).
+      </div>
+      {loading ? (
+        <div>Cargando datos...</div>
+      ) : Object.keys(pasivos).length === 0 ? (
+        <div>No tienes posiciones en corto.</div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div>
+            <h3 className="font-semibold mb-2">Por pasivo (short)</h3>
+            <Chart
+              options={{
+                labels: Object.keys(pasivos),
+                legend: { position: "bottom" },
+                dataLabels: { enabled: true, formatter: (v) => v.toFixed(2) + "%" },
+              }}
+              series={Object.values(pasivos)}
+              type="pie"
+              height={300}
+            />
+          </div>
+          <div>
+            <h3 className="font-semibold mb-2">Por categoría</h3>
+            <Chart
+              options={{
+                labels: Object.keys(pasivosPorCategoria),
+                legend: { position: "bottom" },
+                dataLabels: { enabled: true, formatter: (v) => v.toFixed(2) + "%" },
+              }}
+              series={Object.values(pasivosPorCategoria)}
               type="pie"
               height={300}
             />
@@ -178,6 +206,6 @@ const PortfolioBalancePie = ({ refresh }) => {
       )}
     </div>
   );
-};
+});
 
 export default PortfolioBalancePie;

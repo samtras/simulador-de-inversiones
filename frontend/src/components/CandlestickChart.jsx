@@ -7,8 +7,9 @@
 import { useState, useEffect } from "react";
 import Chart from "react-apexcharts";
 import axios from "axios";
+import { SMA, EMA, BollingerBands } from "technicalindicators";
 
-const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, '');
 
 /**
  * Componente CandlestickChart
@@ -58,6 +59,7 @@ const CandlestickChart = ({ assetName, symbol }) => {
           url = `${API_URL}/market-data/historical/${symbol}?interval=${interval}`;
         }
         const response = await axios.get(url);
+        console.log("Datos históricos recibidos:", response.data);
         setChartData(response.data);
       } catch {
         setError("Error al cargar los datos históricos.");

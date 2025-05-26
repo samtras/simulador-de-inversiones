@@ -15,7 +15,7 @@ import CryptosTable from "../components/CryptosTable";
 import ForexTable from "../components/ForexTable";
 import { usePortfolio } from "../context/PortfolioContext";
 
-const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, '');
 
 const Dashboard = () => {
   const [marketData, setMarketData] = useState([]);
@@ -173,6 +173,7 @@ const Dashboard = () => {
                   <th className="py-2 px-4 border-b">Cambio</th>
                   <th className="py-2 px-4 border-b">Variación (%)</th>
                   <th className="py-2 px-4 border-b">Acciones</th>
+                  <th className="py-2 px-4 border-b">Simular</th>
                 </tr>
               </thead>
               <tbody>
@@ -200,7 +201,15 @@ const Dashboard = () => {
                           onClick={() => handleAssetSelect(item)}
                           className="bg-blue-600 text-white px-4 py-2 rounded hover:bg-blue-700"
                         >
-                          Ver gráfico
+                          Operar
+                        </button>
+                      </td>
+                      <td className="py-2 px-4 border-b">
+                        <button
+                          onClick={() => navigate(`/simulacion?symbol=${item.symbol}`)}
+                          className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+                        >
+                          Simular
                         </button>
                       </td>
                     </tr>

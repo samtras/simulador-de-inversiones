@@ -7,6 +7,8 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, '');
+
 /**
  * Componente OrderList
  * Lista todas las órdenes (abiertas y cerradas) de un usuario específico.
@@ -29,7 +31,7 @@ const OrderList = ({ userId }) => {
      */
     const fetchOrders = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/orders/${userId}`);
+        const response = await axios.get(`${API_URL}/orders/${userId}`);
         setOrders(response.data);
       } catch (error) {
         console.error("Error obteniendo las órdenes:", error.message);

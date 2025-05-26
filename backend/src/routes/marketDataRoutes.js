@@ -406,16 +406,22 @@ router.get('/historical-forex/:symbol', async (req, res) => {
     return res.json(cachedData);
   }
   try {
-    const url = `https://financialmodelingprep.com/stable/historical-price-eod/light?symbol=${symbol}&apikey=${API_KEY}`;
+    // Cambia 'light' por 'full' para obtener OHLC
+    const url = `https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=${symbol}&apikey=${API_KEY}`;
     const response = await axios.get(url);
-    let data = response.data?.historical || [];
+    let data = response.data?.historical || response.data || [];
     if (interval !== 'max') {
       const days = parseInt(interval, 10);
       data = data.slice(0, days);
     }
     const formattedData = data.map((entry) => ({
       x: new Date(entry.date),
-      y: [entry.open, entry.high, entry.low, entry.close],
+      y: [
+        entry.open ?? entry.price,
+        entry.high ?? entry.price,
+        entry.low ?? entry.price,
+        entry.close ?? entry.price
+      ],
     }));
     setCache(cacheKey, formattedData, 60 * 60 * 1000);
     res.json(formattedData);
@@ -423,7 +429,7 @@ router.get('/historical-forex/:symbol', async (req, res) => {
     res.status(500).json({
       message: 'Error obteniendo histórico de forex',
       error: error.response ? error.response.data : error.message,
-      url: `https://financialmodelingprep.com/stable/historical-price-eod/light?symbol=${symbol}&apikey=${API_KEY}`,
+      url: `https://financialmodelingprep.com/stable/historical-price-eod/full?symbol=${symbol}&apikey=${API_KEY}`,
       apiKey: API_KEY ? 'PRESENTE' : 'FALTA'
     });
   }

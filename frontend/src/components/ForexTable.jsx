@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
+import { useNavigate } from "react-router-dom";
 
-const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, '');
 
 const FOREX_SYMBOLS = [
   "USDCAD", "EURUSD", "GBPUSD", "USDJPY", "AUDUSD", "USDCHF", "NZDUSD", "USDCNY", "USDMXN", "USDINR"
@@ -11,6 +12,7 @@ const ForexTable = ({ onSelect }) => {
   const [forex, setForex] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchForex = async () => {
@@ -42,7 +44,8 @@ const ForexTable = ({ onSelect }) => {
             <th className="py-2 px-4 border-b">Símbolo</th>
             <th className="py-2 px-4 border-b">Precio</th>
             <th className="py-2 px-4 border-b">Cambio</th>
-            <th className="py-2 px-4 border-b">Acciones</th>
+            <th className="py-2 px-4 border-b">Operar</th>
+            <th className="py-2 px-4 border-b">Simular</th>
           </tr>
         </thead>
         <tbody>
@@ -58,7 +61,15 @@ const ForexTable = ({ onSelect }) => {
                   onClick={() => onSelect(item)}
                   className="bg-indigo-600 text-white px-4 py-2 rounded hover:bg-indigo-700"
                 >
-                  Ver gráfico
+                  Operar
+                </button>
+              </td>
+              <td className="py-2 px-4 border-b">
+                <button
+                  onClick={() => navigate(`/simulacion?symbol=${item.symbol}`)}
+                  className="bg-purple-600 text-white px-4 py-2 rounded hover:bg-purple-700"
+                >
+                  Simular
                 </button>
               </td>
             </tr>

@@ -8,7 +8,7 @@
 import { useEffect, useState } from "react";
 import axios from "axios";
 
-const API_URL = import.meta.env.BACKEND_API_URL || "http://localhost:5000/api";
+const API_URL = (import.meta.env.VITE_API_URL || "http://localhost:5000/api").replace(/\/$/, '');
 
 const Assets = ({ onSelectAsset }) => {
   const [assets, setAssets] = useState([]);
@@ -16,7 +16,7 @@ const Assets = ({ onSelectAsset }) => {
   useEffect(() => {
     const fetchAssets = async () => {
       try {
-        const response = await axios.get(`${API_URL}/assets`);
+        const response = await axios.get(`${API_URL}/market-data`);
         setAssets(response.data);
       } catch (error) {
         console.error("Error obteniendo activos:", error.message);

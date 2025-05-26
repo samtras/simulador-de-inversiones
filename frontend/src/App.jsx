@@ -20,6 +20,7 @@ import Layout from "./components/Layout"; // Importar el nuevo componente Layout
 import CompoundInterestCalculator from "./pages/CompoundInterestCalculator"; // Importar la calculadora
 import Documentation from "./pages/Documentation"; // Importar la nueva página
 import Portfolios from "./pages/Portfolios";
+import Simulation from "./pages/Simulation";
 import { PortfolioProvider } from "./context/PortfolioContext";
 
 function App() {
@@ -42,6 +43,7 @@ function App() {
               <Route path="/calendar" element={<Calendar />} />
               <Route path="/settings" element={<Settings />} />
               <Route path="/portafolios" element={<Portfolios />} />
+              <Route path="/simulacion" element={<Simulation />} />
             </Route>
           </Route>
 

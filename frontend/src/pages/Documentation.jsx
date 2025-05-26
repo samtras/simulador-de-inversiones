@@ -52,6 +52,37 @@ const Documentation = () => {
               <p className="text-sm text-gray-600">Representa la evolución del precio de un activo en el tiempo. Cada vela muestra el precio de apertura, cierre, máximo y mínimo en un periodo.</p>
             </div>
           </div>
+
+          {/* Sección: Riesgos, Rendimientos y Diversificación */}
+          <div className="mt-8 mb-6">
+            <h3 className="text-xl font-semibold mb-4">Riesgos, Rendimientos y Diversificación</h3>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+              <div className="p-4 bg-white shadow rounded-md">
+                <h4 className="text-lg font-semibold mb-2">Riesgos</h4>
+                <p className="text-sm text-gray-600">
+                  El riesgo representa la posibilidad de pérdida en una inversión. Cada activo tiene diferentes niveles de riesgo, y es importante entenderlos antes de invertir. Un mayor riesgo generalmente implica la posibilidad de mayores rendimientos, pero también de mayores pérdidas.
+                </p>
+              </div>
+              <div className="p-4 bg-white shadow rounded-md">
+                <h4 className="text-lg font-semibold mb-2">Rendimientos</h4>
+                <p className="text-sm text-gray-600">
+                  Los rendimientos son las ganancias o pérdidas obtenidas de una inversión. Pueden venir en forma de incremento en el precio del activo, dividendos, o intereses. El rendimiento histórico no garantiza resultados futuros, por lo que es importante analizar múltiples factores al tomar decisiones.
+                </p>
+              </div>
+              <div className="p-4 bg-white shadow rounded-md">
+                <h4 className="text-lg font-semibold mb-2">Diversificación</h4>
+                <p className="text-sm text-gray-600">
+                  La diversificación es una estrategia que consiste en distribuir las inversiones entre diferentes tipos de activos para reducir el riesgo. Al no "poner todos los huevos en la misma canasta", se puede minimizar el impacto de la caída de un activo específico en el portafolio total.
+                </p>
+              </div>
+            </div>
+            <div className="mt-4 p-4 bg-gray-50 rounded-md text-gray-700">
+              <p className="text-sm">
+                Si desea conocer más información sobre riesgos, rendimientos y diversificación, puede encontrar mas información aquí: <a href="https://www.centro-virtual.com/recursos/biblioteca/pdf/analisis_financiero/unidad2_pdf1.pdf" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:text-blue-800 underline">https://www.centro-virtual.com/recursos/biblioteca/pdf/analisis_financiero/unidad2_pdf1.pdf</a>
+              </p>
+            </div>
+          </div>
+
           <div className="mt-6 p-4 bg-blue-50 rounded-md text-blue-700">
             <InformationCircleIcon className="inline-block w-5 h-5 mr-2 align-middle" />
             <span className="text-sm">Estos conceptos te ayudarán a comprender mejor las funciones del simulador y a practicar estrategias de inversión de manera segura.</span>
